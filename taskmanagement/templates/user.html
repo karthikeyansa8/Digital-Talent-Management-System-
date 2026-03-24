@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Dashboard{% endblock title %}
+
+{% block extra_css %}
+  <style>
+    .dashboard-shell {
+      min-height: 100vh;
+      background: radial-gradient(circle at 12% 12%, #d6f4ff 0, transparent 40%), radial-gradient(circle at 88% 88%, #d8ffe9 0, transparent 45%), #f2fff8;
+    }
+
+    .dashboard-card {
+      border: 0;
+      border-radius: 1.1rem;
+      box-shadow: 0 0.75rem 2rem rgba(8, 80, 60, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 1rem 2.2rem rgba(8, 80, 60, 0.18);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <main class="dashboard-shell py-4 py-md-5">
+    <div class="container">
+
+      {% include 'includes/errors.html' %}
+
+      
+        <div class="row g-4">
+          {% for usertask in usertasks %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card dashboard-card h-100">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ usertask.task.title }}</h5>
+                  <p class="card-text text-secondary flex-grow-1">{{ usertask.task.description }}</p>
+                  <a href="{{ usertask.task.task_link }}" target="_blank" class="btn btn-outline-primary btn-sm mb-3">Open Task</a>
+                  
+                  <!--  STATUS BADGE -->
+                  {% if usertask.is_completed %}
+                        <span class="badge bg-success">Completed</span>
+                  {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                  {% endif %}
+                  <br>
+                  {% if not usertask.is_completed %}
+                  <form method="post" action="{% url 'complete_task' usertask.task_id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-success btn-sm" {% if usertask.is_completed %}disabled{% endif %}>
+                        Completed
+                    </button>
+                  </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12">
+              <div class="alert alert-info mb-0">No tasks assigned yet.</div>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+  </main>
+{% endblock %}
