@@ -154,19 +154,40 @@ def reset_password(request, uidb64, token):
 @login_required(login_url='login')
 def user(request):
     user_tasks = UserTask.objects.filter(user_id=request.user).select_related('task').order_by('id')
-    return render(request,'user.html',{'usertasks':user_tasks})
+    
+    # Filter out soft-deleted tasks and calculate statistics
+    active_user_tasks = user_tasks.filter(task__deleted_at__isnull=True)
+    
+    total_tasks = active_user_tasks.count()
+    pending_count = active_user_tasks.filter(status='pending').count()
+    in_progress_count = active_user_tasks.filter(status='in_progress').count()
+    completed_count = active_user_tasks.filter(status='completed').count()
+    
+    # Calculate completion percentage
+    completion_percentage = round((completed_count / total_tasks * 100), 1) if total_tasks > 0 else 0
+    
+    stats = {
+        'total_tasks': total_tasks,
+        'pending': pending_count,
+        'in_progress': in_progress_count,
+        'completed': completed_count,
+        'completion_percentage': completion_percentage,
+    }
+    
+    return render(request,'user.html',{'usertasks':user_tasks, 'stats':stats})
     
 @login_required(login_url='adminlogin')
 def admin(request):
     
     form = TaskForm()
+    
+    # Handle task creation form submission
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
             task.created_by = request.user
             task.save()
-            # messages.success(request,'Task created Successfully!')
             
             for user in User.objects.all():
                 if user != request.user:
@@ -177,7 +198,46 @@ def admin(request):
             
             return redirect('admin')
     
-    return render(request,'admin.html',{'form':form,'tasks':Task.objects.all().order_by('id')})
+    # Get active (non-deleted) tasks
+    active_tasks = Task.objects.filter(deleted_at__isnull=True).order_by('id')
+    
+    # Calculate task statistics (excluding soft-deleted tasks)
+    total_tasks = active_tasks.count()
+    
+    # Get all UserTasks for these active tasks
+    all_user_tasks = UserTask.objects.filter(task__deleted_at__isnull=True)
+    completed_count = all_user_tasks.filter(status='completed').count()
+    
+    # Calculate overall completion percentage
+    total_user_tasks = all_user_tasks.count()
+    completion_percentage = round((completed_count / total_user_tasks * 100), 1) if total_user_tasks > 0 else 0
+    
+    stats = {
+        'total_tasks': total_tasks,
+        'completion_percentage': completion_percentage,
+    }
+    
+    # Always calculate user stats (will be populated by JavaScript, always default to hidden)
+    users_with_stats = []
+    all_users = User.objects.exclude(id=request.user.id).order_by('first_name')
+    
+    for user in all_users:
+        user_tasks = UserTask.objects.filter(user=user, task__deleted_at__isnull=True)
+        users_with_stats.append({
+            'user': user,
+            'total_tasks': user_tasks.count(),
+            'pending': user_tasks.filter(status='pending').count(),
+            'in_progress': user_tasks.filter(status='in_progress').count(),
+            'completed': user_tasks.filter(status='completed').count(),
+        })
+    
+    return render(request,'admin.html',{
+        'form':form,
+        'tasks':active_tasks,
+        'stats':stats,
+        'show_users': False,
+        'users_with_stats': users_with_stats
+    })
 
 @login_required(login_url='adminlogin')
 @require_POST

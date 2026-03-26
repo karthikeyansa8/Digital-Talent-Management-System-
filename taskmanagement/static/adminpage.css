@@ -1,0 +1,174 @@
+    .dashboard-shell {
+      min-height: 100vh;
+            background: radial-gradient(circle at 8% 10%, #ffe2c7 0, transparent 42%), radial-gradient(circle at 92% 90%, #ffd6db 0, transparent 45%), #fff8f1;
+    }
+
+    .dashboard-card {
+      border: 0;
+            border-radius: 1.1rem;
+            box-shadow: 0 0.75rem 2rem rgba(113, 51, 19, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 1rem 2.2rem rgba(113, 51, 19, 0.18);
+        }
+
+        .admin-create-btn {
+            border: 0;
+            background: linear-gradient(135deg, #d96a2a, #ef8f43);
+            box-shadow: 0 0.4rem 1rem rgba(217, 106, 42, 0.28);
+        }
+
+        .admin-create-btn:hover {
+            background: linear-gradient(135deg, #c85e22, #df7f33);
+        }
+
+        /* Analytics Dashboard Styles */
+        .analytics-section {
+            margin-bottom: 3rem;
+        }
+
+        .analytics-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6b4423;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.6rem 1.6rem rgba(113, 51, 19, 0.1);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.8rem 2rem rgba(113, 51, 19, 0.15);
+        }
+
+        .stat-card.total {
+            border-left-color: #d96a2a;
+        }
+
+        .stat-card.completed {
+            border-left-color: #22c55e;
+        }
+
+        .stat-card.in-progress {
+            border-left-color: #f59e0b;
+        }
+
+        .stat-card.pending {
+            border-left-color: #ef4444;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.8rem;
+            box-shadow: 0 0.6rem 1.6rem rgba(113, 51, 19, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .progress-percentage {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d96a2a, #ef8f43);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .progress-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-detail-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .detail-dot.completed {
+            background: #22c55e;
+        }
+
+        .detail-dot.in-progress {
+            background: #f59e0b;
+        }
+
+        .detail-dot.pending {
+            background: #ef4444;
+        }
+
+        .progress-detail-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress-detail-count {
+            font-weight: 600;
+            color: #1a1a2e;
+        }

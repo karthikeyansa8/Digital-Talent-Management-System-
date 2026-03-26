@@ -1,36 +1,9 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Admin Dashboard{% endblock title %}
 
 {% block extra_css %}
-  <style>
-    .dashboard-shell {
-      min-height: 100vh;
-            background: radial-gradient(circle at 8% 10%, #ffe2c7 0, transparent 42%), radial-gradient(circle at 92% 90%, #ffd6db 0, transparent 45%), #fff8f1;
-    }
-
-    .dashboard-card {
-      border: 0;
-            border-radius: 1.1rem;
-            box-shadow: 0 0.75rem 2rem rgba(113, 51, 19, 0.12);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 1rem 2.2rem rgba(113, 51, 19, 0.18);
-        }
-
-        .admin-create-btn {
-            border: 0;
-            background: linear-gradient(135deg, #d96a2a, #ef8f43);
-            box-shadow: 0 0.4rem 1rem rgba(217, 106, 42, 0.28);
-        }
-
-        .admin-create-btn:hover {
-            background: linear-gradient(135deg, #c85e22, #df7f33);
-    }
-  </style>
+<link rel="stylesheet" href="{% static 'adminpage.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -41,6 +14,68 @@
             {% include 'includes/errors.html' %}
 
             {% if user.is_staff %}
+                <!-- Analytics Dashboard -->
+                <div class="analytics-section">
+                    <h2 class="analytics-header">📊 Admin Analytics</h2>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card total">
+                            <div class="stat-label">Total Tasks</div>
+                            <div class="stat-value">{{ stats.total_tasks }}</div>
+                        </div>
+                        
+                        <div class="stat-card completed">
+                            <div class="stat-label">Completion Rate</div>
+                            <div class="stat-value">{{ stats.completion_percentage }}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show Users Button -->
+                <button type="button" class="btn btn-primary admin-create-btn" id="showUsersBtn" style="gap: 0.5rem; display: inline-flex; align-items: center; margin-bottom: 2rem;" onclick="showUsers()">
+                    👥 Show All Users
+                </button>
+
+                <!-- Users Section -->
+                <div style="background: white; border-radius: 1.2rem; padding: 1.8rem; box-shadow: 0 0.6rem 1.6rem rgba(113, 51, 19, 0.1); margin-bottom: 2rem; display: {% if show_users %}block{% else %}none{% endif %};">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 600; color: #1a1a2e; margin: 0;">All Users</h3>
+                        <button type="button" class="btn btn-secondary" style="border: 0; background: #6b7280; cursor: pointer;" onclick="hideUsers()">← Back</button>
+                    </div>
+                    
+                    {% if users_with_stats %}
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #f3f4f6;">
+                                <tr>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">First Name</th>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">Email</th>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">Total Tasks</th>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">Not Started</th>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">In Progress</th>
+                                    <th style="padding: 1rem; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e5e7eb;">Completed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in users_with_stats %}
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="padding: 1rem; color: #1a1a2e;">{{ item.user.first_name|default:"—" }}</td>
+                                    <td style="padding: 1rem; color: #1a1a2e;">{{ item.user.email }}</td>
+                                    <td style="padding: 1rem; color: #1a1a2e; font-weight: 600;">{{ item.total_tasks }}</td>
+                                    <td style="padding: 1rem; color: #ef4444; font-weight: 600;">{{ item.pending }}</td>
+                                    <td style="padding: 1rem; color: #f59e0b; font-weight: 600;">{{ item.in_progress }}</td>
+                                    <td style="padding: 1rem; color: #22c55e; font-weight: 600;">{{ item.completed }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 0.5rem; padding: 1rem; color: #1e40af;">No users found.</div>
+                    {% endif %}
+                </div>
+
                 <div class="mb-3">
                 <button class="btn btn-primary admin-create-btn" data-bs-toggle="collapse" data-bs-target="#createTaskForm" aria-expanded="false" aria-controls="createTaskForm">
                     + Create Task
@@ -132,6 +167,8 @@
             {% endif %}
         </div>
     </main>
+
+    <script src="{% static 'adminshowuser.js' %}"></script>
   
 {% endblock %}
   

@@ -1,26 +1,9 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Task Dashboard{% endblock title %}
 
 {% block extra_css %}
-  <style>
-    .dashboard-shell {
-      min-height: 100vh;
-      background: radial-gradient(circle at 12% 12%, #d6f4ff 0, transparent 40%), radial-gradient(circle at 88% 88%, #d8ffe9 0, transparent 45%), #f2fff8;
-    }
-
-    .dashboard-card {
-      border: 0;
-      border-radius: 1.1rem;
-      box-shadow: 0 0.75rem 2rem rgba(8, 80, 60, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .dashboard-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 1rem 2.2rem rgba(8, 80, 60, 0.18);
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'userpage.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -29,7 +12,60 @@
 
       {% include 'includes/errors.html' %}
 
-      
+      <!-- Analytics Dashboard -->
+      <div class="analytics-section">
+        <h2 class="analytics-header">📊 Your Task Analytics</h2>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card total">
+            <div class="stat-label">Total Tasks</div>
+            <div class="stat-value">{{ stats.total_tasks }}</div>
+          </div>
+          
+          <div class="stat-card completed">
+            <div class="stat-label">✓ Completed</div>
+            <div class="stat-value">{{ stats.completed }}</div>
+          </div>
+          
+          <div class="stat-card in-progress">
+            <div class="stat-label">⚡ In Progress</div>
+            <div class="stat-value">{{ stats.in_progress }}</div>
+          </div>
+          
+          <div class="stat-card pending">
+            <div class="stat-label">⏳ Not Started</div>
+            <div class="stat-value">{{ stats.pending }}</div>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-title">Completion Progress</span>
+            <span class="progress-percentage">{{ stats.completion_percentage }}%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{ stats.completion_percentage }}%;"></div>
+          </div>
+          <div class="progress-details">
+            <div class="progress-detail-item">
+              <div class="progress-detail-dot detail-dot completed"></div>
+              <span class="progress-detail-text"><span class="progress-detail-count">{{ stats.completed }}</span> Completed</span>
+            </div>
+            <div class="progress-detail-item">
+              <div class="progress-detail-dot detail-dot in-progress"></div>
+              <span class="progress-detail-text"><span class="progress-detail-count">{{ stats.in_progress }}</span> In Progress</span>
+            </div>
+            <div class="progress-detail-item">
+              <div class="progress-detail-dot detail-dot pending"></div>
+              <span class="progress-detail-text"><span class="progress-detail-count">{{ stats.pending }}</span> Not Started</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Section -->
         <div class="row g-4">
           {% for usertask in usertasks %}
               {% if not usertask.task.deleted_at %}
