@@ -183,6 +183,7 @@ def admin(request):
     
     # Handle task creation form submission
     if request.method == 'POST':
+        print("Received POST request for task creation")
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
@@ -197,11 +198,14 @@ def admin(request):
                         print(f"Error creating UserTask for user {user.id} and task {task.id}: {e}")
             
             return redirect('admin')
+        
+    
+    # --------------------ADMIN DASHBOARD STATS CALCULATION--------------------
+    # For admin dashboard stats and user stats calculation (excluding soft-deleted tasks)
     
     # Get active (non-deleted) tasks
     active_tasks = Task.objects.filter(deleted_at__isnull=True).order_by('id')
     
-    # Calculate task statistics (excluding soft-deleted tasks)
     total_tasks = active_tasks.count()
     
     # Get all UserTasks for these active tasks
@@ -217,19 +221,25 @@ def admin(request):
         'completion_percentage': completion_percentage,
     }
     
-    # Always calculate user stats (will be populated by JavaScript, always default to hidden)
-    users_with_stats = []
-    all_users = User.objects.exclude(id=request.user.id).order_by('first_name')
     
-    for user in all_users:
-        user_tasks = UserTask.objects.filter(user=user, task__deleted_at__isnull=True)
-        users_with_stats.append({
-            'user': user,
-            'total_tasks': user_tasks.count(),
-            'pending': user_tasks.filter(status='pending').count(),
-            'in_progress': user_tasks.filter(status='in_progress').count(),
-            'completed': user_tasks.filter(status='completed').count(),
-        })
+    # --------------------USER STATS CALCULATION--------------------
+    # Show user stats for all users (excluding the admin and soft-deleted tasks)
+    
+    # Always calculate user stats (will be populated by JavaScript, always default to hidden)
+    if request.method == 'GET':
+        print("Calculating user stats...")
+        users_with_stats = []
+        all_users = User.objects.exclude(id=request.user.id).order_by('first_name')
+        
+        for user in all_users:
+            user_tasks = UserTask.objects.filter(user=user, task__deleted_at__isnull=True)
+            users_with_stats.append({
+                'user': user,
+                'total_tasks': user_tasks.count(),
+                'pending': user_tasks.filter(status='pending').count(),
+                'in_progress': user_tasks.filter(status='in_progress').count(),
+                'completed': user_tasks.filter(status='completed').count(),
+            })
     
     return render(request,'admin.html',{
         'form':form,
