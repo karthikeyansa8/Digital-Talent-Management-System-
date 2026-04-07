@@ -178,7 +178,7 @@ def user(request):
     return render(request,'user.html',{'usertasks':user_tasks, 'stats':stats})
     
 @login_required(login_url='adminlogin')
-@cache_page(60 * 2)  # Cache the admin dashboard for 15 minutes to improve performance
+@cache_page(60 * 1)  
 def admin(request):
     
     form = TaskForm()
@@ -243,7 +243,7 @@ def admin(request):
                 'in_progress': user_tasks.filter(status='in_progress').count(),
                 'completed': user_tasks.filter(status='completed').count(),
             })
-    
+            # print(users_with_stats)
     return render(request,'admin.html',{
         'form':form,
         'tasks':active_tasks,

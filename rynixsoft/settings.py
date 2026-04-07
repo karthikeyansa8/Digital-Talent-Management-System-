@@ -150,3 +150,11 @@ CACHES = {
         "LOCATION": os.getenv('REDIS_PUBLIC_URL'),
     }
 }
+
+# in memory caching for development (not suitable for production)
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+#         "LOCATION": ["127.0.0.1:8000"]
+#     }
+# }

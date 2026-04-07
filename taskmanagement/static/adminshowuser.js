@@ -6,12 +6,10 @@ function showUsers() {
             }
             
             // Show the users section
-            const usersSection = document.querySelectorAll('div[style*="padding: 1.8rem"]');
-            usersSection.forEach(section => {
-                if (section.querySelector('h3') && section.querySelector('h3').textContent.trim() === 'All Users') {
-                    section.style.display = 'block';
-                }
-            });
+            const usersSection = document.getElementById('usersSection');
+            if (usersSection) {
+                usersSection.style.display = 'block';
+            }
         }
         
         function hideUsers() {
@@ -22,10 +20,8 @@ function showUsers() {
             }
             
             // Hide the users section
-            const usersSection = document.querySelectorAll('div[style*="padding: 1.8rem"]');
-            usersSection.forEach(section => {
-                if (section.querySelector('h3') && section.querySelector('h3').textContent.trim() === 'All Users') {
-                    section.style.display = 'none';
-                }
-            });
+            const usersSection = document.getElementById('usersSection');
+            if (usersSection) {
+                usersSection.style.display = 'none';
+            }
         }

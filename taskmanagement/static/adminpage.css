@@ -5,24 +5,52 @@
 
     .dashboard-card {
       border: 0;
-            border-radius: 1.1rem;
-            box-shadow: 0 0.75rem 2rem rgba(113, 51, 19, 0.12);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+      border-radius: 1.1rem;
+      box-shadow: 0 0.75rem 2rem rgba(113, 51, 19, 0.12);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      background: white;
+      border: 1px solid rgba(217, 106, 42, 0.08);
+    }
 
-        .dashboard-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 1rem 2.2rem rgba(113, 51, 19, 0.18);
-        }
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #d96a2a, #ef8f43, transparent);
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 1.5rem 3.5rem rgba(113, 51, 19, 0.2);
+      border-color: rgba(217, 106, 42, 0.15);
+    }
+
+    .dashboard-card .card-body {
+      position: relative;
+      z-index: 2;
+    }
 
         .admin-create-btn {
             border: 0;
             background: linear-gradient(135deg, #d96a2a, #ef8f43);
             box-shadow: 0 0.4rem 1rem rgba(217, 106, 42, 0.28);
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .admin-create-btn:hover {
             background: linear-gradient(135deg, #c85e22, #df7f33);
+            box-shadow: 0 0.6rem 1.5rem rgba(217, 106, 42, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .admin-create-btn:active {
+            transform: translateY(0);
         }
 
         /* Analytics Dashboard Styles */
@@ -50,28 +78,63 @@
             padding: 1.5rem;
             box-shadow: 0 0.6rem 1.6rem rgba(113, 51, 19, 0.1);
             border-left: 4px solid;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            opacity: 0.05;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0.8rem 2rem rgba(113, 51, 19, 0.15);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 1rem 2.5rem rgba(113, 51, 19, 0.18);
+        }
+
+        .stat-card:hover::before {
+            right: -30px;
+            opacity: 0.1;
         }
 
         .stat-card.total {
             border-left-color: #d96a2a;
         }
 
+        .stat-card.total::before {
+            background: #d96a2a;
+        }
+
         .stat-card.completed {
             border-left-color: #22c55e;
+        }
+
+        .stat-card.completed::before {
+            background: #22c55e;
         }
 
         .stat-card.in-progress {
             border-left-color: #f59e0b;
         }
 
+        .stat-card.in-progress::before {
+            background: #f59e0b;
+        }
+
         .stat-card.pending {
             border-left-color: #ef4444;
+        }
+
+        .stat-card.pending::before {
+            background: #ef4444;
         }
 
         .stat-label {
@@ -87,6 +150,8 @@
             font-size: 2.2rem;
             font-weight: 700;
             color: #1a1a2e;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-section {
@@ -171,4 +236,187 @@
         .progress-detail-count {
             font-weight: 600;
             color: #1a1a2e;
+        }
+
+        /* Task Card Specific Styles */
+        .dashboard-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .dashboard-card .card-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #6b7280;
+        }
+
+        .dashboard-card .card-text.text-secondary {
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card .btn-outline-primary {
+            border: 2px solid #d96a2a;
+            color: #d96a2a;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border-radius: 0.6rem;
+        }
+
+        .dashboard-card .btn-outline-primary:hover {
+            background: #d96a2a;
+            color: white;
+            box-shadow: 0 0.3rem 0.8rem rgba(217, 106, 42, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .dashboard-card .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 0.6rem;
+        }
+
+        .dashboard-card .btn-warning:hover {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            box-shadow: 0 0.3rem 0.8rem rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .dashboard-card .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 0.6rem;
+        }
+
+        .dashboard-card .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            box-shadow: 0 0.3rem 0.8rem rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .dashboard-card .d-flex.gap-2 {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .dashboard-card .d-flex.gap-2 > * {
+            flex: 1;
+        }
+
+        /* Modal Improvements */
+        .modal-content {
+            border: 0;
+            border-radius: 1.1rem;
+            box-shadow: 0 1rem 3rem rgba(113, 51, 19, 0.15);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #fff8f1 0%, #ffe8d6 100%);
+            border-radius: 1.1rem 1.1rem 0 0;
+            padding: 1.5rem;
+        }
+
+        .modal-header .modal-title {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1.8rem;
+        }
+
+        .modal-body .form-label {
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body .form-control {
+            border: 1px solid #d1d5db;
+            border-radius: 0.6rem;
+            padding: 0.7rem 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .modal-body .form-control:focus {
+            border-color: #d96a2a;
+            box-shadow: 0 0 0 3px rgba(217, 106, 42, 0.1);
+            outline: none;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 0 0 1.1rem 1.1rem;
+        }
+
+        .modal-footer .btn {
+            border-radius: 0.6rem;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-footer .btn-secondary {
+            background: #e5e7eb;
+            color: #6b7280;
+            border: none;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        .modal-footer .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            color: white;
+        }
+
+        .modal-footer .btn-success:hover {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            box-shadow: 0 0.3rem 0.8rem rgba(34, 197, 94, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Badge Styles */
+        .badge {
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+        }
+
+        /* Analytics Header with better styling */
+        .analytics-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6b4423;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .analytics-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #d96a2a, #ef8f43);
+            border-radius: 2px;
         }
