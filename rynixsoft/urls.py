@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 
+handler404 = 'rynixsoft.views.page_not_found_error'  # --> for error handling
+handler500 = 'rynixsoft.views.internal_server_error'  # --> for error handling
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('task/',include('taskmanagement.urls')),
