@@ -53,6 +53,8 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
 }
 
+print("CLOUDINARY NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # --> for serving static files in production
