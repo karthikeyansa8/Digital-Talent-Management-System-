@@ -26,4 +26,4 @@ handler500 = 'rynixsoft.views.internal_server_error'  # --> for error handling
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('task/',include('taskmanagement.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
